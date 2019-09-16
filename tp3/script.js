@@ -1,18 +1,10 @@
 function checkId(id){
    var ar = document.getElementsByClassName('inst-id');
-   Array(ar).map(x=>console.log(x.value));
-   //console.log('inside'+a);
-   console.log(ar);
-   return true;
+   return Array.from(ar).every(x=>parseInt(x.innerText)!=id);
 }
 
-function valueChecks(form,ins){
-   var a = ins[0]!=null && ins[1]!=null && checkId(ins[0].value)
-   console.log(a);
-   return a;
-}
-
-function setUp(row,idCell,typeCell,descCell){
+function setUp(idCell,typeCell,descCell){
+   row = document.createElement('tr');
    idCell.className = 'inst-id';
    typeCell.className = 'inst-ty';
    descCell.className = 'inst-des';
@@ -20,20 +12,21 @@ function setUp(row,idCell,typeCell,descCell){
    row.append(idCell);
    row.append(typeCell);
    row.append(descCell);
+   return row;
 }
 
-function saveFunction(doc){
-   var form = doc.getElementById('form');
-   var ins = form.getElementsByClassName('forminput');
-   if (valueChecks(form,ins)){
-      var row = document.createElement('tr');
+function saveFunction(){
+   var form = document.getElementById('form');
+   var ins = form.elements;
+   if (checkId(ins.id.value)){
       var idCell = document.createElement('td');
       var typeCell = document.createElement('td');
       var descCell = document.createElement('td');
-      idCell.textContent = ins[0].value;
-      typeCell.textContent = ins[1].value;
-      descCell.textContent = ins[2].value;
-      setUp(row,idCell,typeCell,descCell);
+      idCell.textContent = ins.id.value.padStart(3, "0");
+      typeCell.textContent = ins.type.value;
+      descCell.textContent = ins.desc.value;
+      var row = setUp(idCell,typeCell,descCell);
       document.getElementById('t-body').append(row);
    }
+   return false;
 }
